@@ -1,0 +1,427 @@
+{
+  "info": {
+    "name": "Red Bicicletas - API (JWT)",
+    "description": "Colección para probar la autenticación con JWT y el acceso a los recursos de bicicletas.\n\nOrden sugerido:\n1. Crear usuario (o hacerlo desde la web en /usuarios/create)\n2. Autenticar -> guarda el token automáticamente en la variable {{token}}\n3. Listar / crear bicicletas con el token\n4. Probar sin token o con token inválido para ver el mensaje de error",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "facebook_access_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Autenticar (credenciales correctas)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const json = pm.response.json();",
+              "if (json.data && json.data.token) {",
+              "  pm.collectionVariables.set('token', json.data.token);",
+              "  console.log('Token guardado en {{token}}');",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jareth@example.com\",\n  \"password\": \"secreto123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/authenticate",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "authenticate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "2. Autenticar (credenciales incorrectas)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 401', () => pm.response.to.have.status(401));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jareth@example.com\",\n  \"password\": \"password_incorrecto\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/authenticate",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "authenticate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Listar bicicletas (con token válido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-access-token",
+            "value": "{{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/bicicletas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bicicletas"
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Listar bicicletas (SIN token -> error)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 401', () => pm.response.to.have.status(401));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/bicicletas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bicicletas"
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. Listar bicicletas (token inválido -> error)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 401', () => pm.response.to.have.status(401));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-access-token",
+            "value": "token.invalido.123"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/bicicletas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bicicletas"
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Crear bicicleta (con token válido)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-access-token",
+            "value": "{{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": 1,\n  \"color\": \"rojo\",\n  \"modelo\": \"urbana\",\n  \"lat\": -34.6037,\n  \"lng\": -58.3816\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/bicicletas/create",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bicicletas",
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Actualizar bicicleta (con token válido)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-access-token",
+            "value": "{{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"<_id de la bicicleta>\",\n  \"code\": 1,\n  \"color\": \"verde\",\n  \"modelo\": \"montaña\",\n  \"lat\": -34.6037,\n  \"lng\": -58.3816\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/bicicletas/update",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bicicletas",
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Eliminar bicicleta (con token válido)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-access-token",
+            "value": "{{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"<_id de la bicicleta>\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/bicicletas/delete",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bicicletas",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "9. Crear usuario vía API (requiere token)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-access-token",
+            "value": "{{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Otro Usuario\",\n  \"email\": \"otro@example.com\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/usuarios/create",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "usuarios",
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "10. Olvidé mi password (envía email)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jareth@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/forgotPassword",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "forgotPassword"
+          ]
+        }
+      }
+    },
+    {
+      "name": "11. Login con Facebook (validar access_token)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Con un access_token válido (obtenido en https://developers.facebook.com/tools/explorer) responde 200 y guarda el JWT",
+              "const json = pm.response.json();",
+              "if (json.data && json.data.token) { pm.collectionVariables.set('token', json.data.token); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"access_token\": \"{{facebook_access_token}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/facebook_token",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "facebook_token"
+          ]
+        }
+      }
+    },
+    {
+      "name": "12. Login con Facebook (token inválido -> 401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"access_token\": \"token-falso\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/facebook_token",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "facebook_token"
+          ]
+        }
+      }
+    }
+  ]
+}

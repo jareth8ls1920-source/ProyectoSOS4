@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  .card
+    h1= message
+    h2= error.status
+    pre #{error.stack}
+    a.btn.btn-primary(href='/') Volver al inicio

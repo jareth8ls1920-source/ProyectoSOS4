@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  .card.card-form
+    h1 Crear cuenta
+    p.muted Al registrarte te enviaremos un email para verificar tu cuenta.
+    form(method='post', action='/usuarios/create')
+      .form-group
+        label(for='nombre') Nombre
+        input#nombre(type='text', name='nombre', value=usuario.nombre, required, autofocus)
+        if errors.nombre
+          span.error= errors.nombre.message
+      .form-group
+        label(for='email') Email
+        input#email(type='email', name='email', value=usuario.email, required)
+        if errors.email
+          span.error= errors.email.message
+      .form-group
+        label(for='password') Password
+        input#password(type='password', name='password', required)
+        if errors.password
+          span.error= errors.password.message
+      .form-group
+        label(for='confirm_password') Confirmar password
+        input#confirm_password(type='password', name='confirm_password', required)
+        if errors.confirm_password
+          span.error= errors.confirm_password.message
+      button.btn.btn-primary.btn-block(type='submit') Registrarme
+    .form-links
+      a(href='/login') Ya tengo cuenta

@@ -1,0 +1,65 @@
+extends ../layout
+
+block content
+  .card.card-form
+    h1 Iniciar sesión
+    if info && info.message
+      .alert.alert-error= info.message
+    #fb-error.alert.alert-error(style='display:none')
+    form(method='post', action='/login')
+      .form-group
+        label(for='email') Email
+        input#email(type='email', name='email', placeholder='tu@email.com', required, autofocus)
+      .form-group
+        label(for='password') Password
+        input#password(type='password', name='password', placeholder='••••••••', required)
+      button.btn.btn-primary.btn-block(type='submit') Ingresar
+    .form-links
+      a(href='/forgotPassword') ¿Olvidaste tu password?
+      span ·
+      a(href='/usuarios/create') Crear una cuenta
+    hr
+    a.btn.btn-google.btn-block(href='/auth/google') Ingresar con Google
+    if facebookAppId
+      button#btn-facebook.btn.btn-facebook.btn-block(type='button') Ingresar con Facebook
+    else
+      button.btn.btn-facebook.btn-block(type='button', disabled, title='Configurar FACEBOOK_APP_ID y FACEBOOK_APP_SECRET') Ingresar con Facebook (no configurado)
+
+  if facebookAppId
+    //- Login con Facebook: el SDK JS obtiene el access token en el navegador y
+    //- se lo manda a la API, que lo valida contra Facebook (estrategia facebook-token).
+    script.
+      window.fbAsyncInit = function () {
+        FB.init({ appId: '#{facebookAppId}', cookie: true, xfbml: false, version: 'v19.0' });
+      };
+      (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/es_LA/sdk.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      function mostrarErrorFacebook(msg) {
+        var el = document.getElementById('fb-error');
+        el.textContent = msg;
+        el.style.display = 'block';
+      }
+
+      document.getElementById('btn-facebook').addEventListener('click', function () {
+        if (!window.FB) return mostrarErrorFacebook('El SDK de Facebook todavía no cargó. Intentá de nuevo.');
+        FB.login(function (response) {
+          if (!response.authResponse) return mostrarErrorFacebook('Login con Facebook cancelado.');
+          fetch('/api/auth/facebook_token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ access_token: response.authResponse.accessToken })
+          }).then(function (r) { return r.json(); }).then(function (data) {
+            if (data.status === 'success') {
+              window.location.href = '/';
+            } else {
+              mostrarErrorFacebook(data.message || 'No se pudo iniciar sesión con Facebook.');
+            }
+          }).catch(function () { mostrarErrorFacebook('Error de red al validar el token de Facebook.'); });
+        }, { scope: 'public_profile,email' });
+      });

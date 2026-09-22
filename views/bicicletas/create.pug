@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+  .card.card-form
+    h1 Nueva bicicleta
+    form(method='post', action='/bicicletas/create')
+      .form-group
+        label(for='code') Código
+        input#code(type='number', name='code', required, autofocus)
+      .form-group
+        label(for='color') Color
+        input#color(type='text', name='color', required)
+      .form-group
+        label(for='modelo') Modelo
+        input#modelo(type='text', name='modelo', required)
+      .form-row
+        .form-group
+          label(for='lat') Latitud
+          input#lat(type='number', step='any', name='lat', placeholder='-34.6037')
+        .form-group
+          label(for='lng') Longitud
+          input#lng(type='number', step='any', name='lng', placeholder='-58.3816')
+      button.btn.btn-primary.btn-block(type='submit') Guardar
+    .form-links
+      a(href='/bicicletas') Volver al listado

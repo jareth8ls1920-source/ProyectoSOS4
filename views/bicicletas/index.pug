@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  .page-header
+    h1 Bicicletas
+    a.btn.btn-primary(href='/bicicletas/create') + Nueva bicicleta
+  if bicis.length === 0
+    p.muted No hay bicicletas cargadas todavía.
+  else
+    table.table
+      thead
+        tr
+          th Código
+          th Color
+          th Modelo
+          th Ubicación (lat, lng)
+          th Acciones
+      tbody
+        each bici in bicis
+          tr
+            td= bici.code
+            td= bici.color
+            td= bici.modelo
+            td= bici.ubicacion && bici.ubicacion.length ? bici.ubicacion.join(', ') : '-'
+            td.actions
+              a.btn.btn-sm.btn-outline(href=`/bicicletas/${bici._id}/update`) Editar
+              form(method='post', action=`/bicicletas/${bici._id}/delete`, style='display:inline')
+                input(type='hidden', name='id', value=bici._id)
+                button.btn.btn-sm.btn-danger(type='submit', onclick="return confirm('¿Eliminar bicicleta?')") Eliminar

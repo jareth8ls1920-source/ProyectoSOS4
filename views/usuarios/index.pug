@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+  .page-header
+    h1 Usuarios
+    a.btn.btn-primary(href='/usuarios/create') + Nuevo usuario
+  if usuarios.length === 0
+    p.muted No hay usuarios registrados todavía.
+  else
+    table.table
+      thead
+        tr
+          th Nombre
+          th Email
+          th Verificado
+          th Acciones
+      tbody
+        each usuario in usuarios
+          tr
+            td= usuario.nombre
+            td= usuario.email
+            td
+              if usuario.verificado
+                span.badge.badge-success Sí
+              else
+                span.badge.badge-warning Pendiente
+            td.actions
+              a.btn.btn-sm.btn-outline(href=`/usuarios/${usuario._id}/update`) Editar
+              form(method='post', action=`/usuarios/${usuario._id}/delete`, style='display:inline')
+                input(type='hidden', name='id', value=usuario._id)
+                button.btn.btn-sm.btn-danger(type='submit', onclick="return confirm('¿Eliminar usuario?')") Eliminar

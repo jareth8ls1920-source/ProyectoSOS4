@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  section.hero
+    h1 Bienvenido a Red Bicicletas
+    p.lead Sistema de administración de bicicletas públicas con autenticación de usuarios, listo para producción.
+    if currentUser
+      p.alert.alert-success Sesión iniciada como #{currentUser.email}
+      a.btn.btn-primary(href='/bicicletas') Ver bicicletas
+    else
+      p.alert.alert-info Para acceder a las bicicletas debes iniciar sesión.
+      a.btn.btn-primary(href='/login') Iniciar sesión
+      | &nbsp;
+      a.btn.btn-outline(href='/usuarios/create') Registrarse
+
+  section.features
+    .feature
+      h3 🔐 Autenticación
+      p Login con Passport (local, Google y Facebook), sesiones y verificación de cuenta por email.
+    .feature
+      h3 📧 Emails
+      p En desarrollo los mails salen por Ethereal; en producción (Heroku) por SendGrid.
+    .feature
+      h3 ☁️ Producción
+      p Deploy en Heroku con MongoDB Atlas y monitoreo con New Relic.
+    .feature
+      h3 🔑 API con JWT
+      p Autenticate en <code>POST /api/auth/authenticate</code> y usá el token en <code>x-access-token</code>.

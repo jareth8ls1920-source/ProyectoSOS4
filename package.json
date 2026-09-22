@@ -1,0 +1,46 @@
+{
+  "name": "red-bicicletas",
+  "version": "1.0.0",
+  "description": "Red de bicicletas públicas - Módulo 4 (deploy en Heroku, Mongo Atlas, SendGrid, Google/Facebook OAuth y New Relic)",
+  "private": true,
+  "main": "app.js",
+  "engines": {
+    "node": "22.x",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www",
+    "seed": "node ./seed.js",
+    "test": "jasmine"
+  },
+  "author": "Jareth",
+  "license": "MIT",
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.4",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^1.20.4",
+    "connect-mongo": "^5.1.0",
+    "cookie-parser": "~1.4.6",
+    "debug": "~4.3.4",
+    "dotenv": "^16.4.5",
+    "express": "^4.22.3",
+    "express-session": "^1.18.0",
+    "http-errors": "~2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.6.0",
+    "morgan": "^1.11.1",
+    "newrelic": "^14.5.0",
+    "nodemailer": "^9.1.1",
+    "passport": "^0.7.0",
+    "passport-facebook-token": "^4.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "jasmine": "^5.2.0",
+    "nodemon": "^3.1.4",
+    "supertest": "^7.0.0"
+  }
+}

@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+  .card.card-form
+    h1 Editar bicicleta
+    form(method='post', action=`/bicicletas/${bici._id}/update`)
+      .form-group
+        label(for='code') Código
+        input#code(type='number', name='code', value=bici.code, required, autofocus)
+      .form-group
+        label(for='color') Color
+        input#color(type='text', name='color', value=bici.color, required)
+      .form-group
+        label(for='modelo') Modelo
+        input#modelo(type='text', name='modelo', value=bici.modelo, required)
+      .form-row
+        .form-group
+          label(for='lat') Latitud
+          input#lat(type='number', step='any', name='lat', value=bici.ubicacion ? bici.ubicacion[0] : '')
+        .form-group
+          label(for='lng') Longitud
+          input#lng(type='number', step='any', name='lng', value=bici.ubicacion ? bici.ubicacion[1] : '')
+      button.btn.btn-primary.btn-block(type='submit') Guardar cambios
+    .form-links
+      a(href='/bicicletas') Volver al listado

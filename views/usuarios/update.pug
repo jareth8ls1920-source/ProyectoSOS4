@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  .card.card-form
+    h1 Editar usuario
+    form(method='post', action=`/usuarios/${usuario._id}/update`)
+      .form-group
+        label(for='nombre') Nombre
+        input#nombre(type='text', name='nombre', value=usuario.nombre, required, autofocus)
+        if errors.nombre
+          span.error= errors.nombre.message
+      .form-group
+        label(for='email') Email
+        input#email(type='email', name='email', value=usuario.email, disabled)
+        small.muted El email no puede modificarse.
+      button.btn.btn-primary.btn-block(type='submit') Guardar cambios
+    .form-links
+      a(href='/usuarios') Volver al listado

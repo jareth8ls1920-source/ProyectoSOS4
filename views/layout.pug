@@ -1,0 +1,23 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    title= title || 'Red Bicicletas'
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    nav.navbar
+      a.brand(href='/') 🚲 Red Bicicletas
+      ul.nav-links
+        li: a(href='/') Inicio
+        li: a(href='/bicicletas') Bicicletas
+        li: a(href='/usuarios') Usuarios
+        if currentUser
+          li.user-info Hola, #{currentUser.nombre}
+          li: a.btn.btn-outline(href='/logout') Salir
+        else
+          li: a.btn.btn-primary(href='/login') Ingresar
+    main.container
+      block content
+    footer
+      p Red Bicicletas — Módulo 4 · Heroku, Mongo Atlas, SendGrid, Google/Facebook y New Relic

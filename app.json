@@ -1,0 +1,23 @@
+{
+  "name": "Red Bicicletas",
+  "description": "Red de bicicletas públicas - Módulo 4 (Node.js, Express, MongoDB Atlas, SendGrid, Google/Facebook, New Relic)",
+  "repository": "https://github.com/jareth8ls1920-source/ProyectoSOS4",
+  "keywords": ["node", "express", "mongodb", "atlas", "sendgrid", "passport", "newrelic"],
+  "stack": "heroku-24",
+  "buildpacks": [{ "url": "heroku/nodejs" }],
+  "env": {
+    "NODE_ENV": { "description": "Entorno de ejecución", "value": "production" },
+    "MONGO_URI": { "description": "Cadena de conexión de MongoDB Atlas (mongodb+srv://usuario:password@cluster.../red_bicicletas)" },
+    "SESSION_SECRET": { "description": "Secreto para firmar la cookie de sesión", "generator": "secret" },
+    "SECRET_KEY": { "description": "Secreto para firmar los JWT de la API", "generator": "secret" },
+    "HOST": { "description": "URL pública de la app (https://<app>.herokuapp.com), usada en los links de los emails y el callback de Google" },
+    "SENDGRID_API_KEY": { "description": "API key de SendGrid para el envío de emails" },
+    "MAIL_FROM": { "description": "Remitente verificado en SendGrid (Single Sender)", "required": false },
+    "GOOGLE_CLIENT_ID": { "description": "Client ID de Google OAuth 2.0", "required": false },
+    "GOOGLE_CLIENT_SECRET": { "description": "Client secret de Google OAuth 2.0", "required": false },
+    "FACEBOOK_APP_ID": { "description": "App ID de Facebook", "required": false },
+    "FACEBOOK_APP_SECRET": { "description": "App secret de Facebook", "required": false },
+    "NEW_RELIC_LICENSE_KEY": { "description": "License key de New Relic", "required": false },
+    "NEW_RELIC_APP_NAME": { "description": "Nombre de la app en New Relic", "value": "Red Bicicletas", "required": false }
+  }
+}
